@@ -40,6 +40,7 @@ router.get('/activate/:link', userController.activate);
 
 router.post('/course', courseController.create);
 router.get('/courses', courseController.getCourses);
+router.get('/course/:id', courseController.getCourseById);
 
 router.post('/assignment', assignmentController.create);
 router.put('/assignment-add', courseController.addAssignment);

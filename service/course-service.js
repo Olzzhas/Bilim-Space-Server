@@ -12,7 +12,7 @@ class CourseService {
       title: title,
       description: description,
       teacher: teacher,
-      students: students,
+      studentsData: students,
     });
 
     return course;

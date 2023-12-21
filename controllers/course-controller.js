@@ -1,13 +1,26 @@
 const courseModel = require('../models/course-model');
+const userModel = require('../models/user-model');
 const assignmentService = require('../service/assignment-service');
 const courseService = require('../service/course-service');
+const mongoose = require('mongoose');
 class CourseController {
   async create(req, res, next) {
     try {
-      const { title, description, teacher, students } = req.body;
-      const courseData = await courseService.create(title, description, teacher, students);
+      const { title, description, teacher, studentsData } = req.body;
+      const courseData = await courseService.create(title, description, teacher, studentsData);
 
-      console.log(students);
+      const courseID = courseData._id.toString();
+
+      for (let i = 0; i < studentsData.length; i++) {
+        await userModel.updateOne(
+          { _id: studentsData[i].student },
+          {
+            $set: {
+              courses: courseID,
+            },
+          },
+        );
+      }
 
       return res.json(courseData);
     } catch (error) {
@@ -34,6 +47,16 @@ class CourseController {
       const courses = await courseModel.find();
 
       return res.json(courses);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getCourseById(req, res, next) {
+    try {
+      const courseData = await courseModel.findById(req.params.id);
+
+      return res.json(courseData);
     } catch (error) {
       next(error);
     }
