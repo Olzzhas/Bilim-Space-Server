@@ -39,6 +39,7 @@ router.post('/logout', userController.logout);
 router.get('/activate/:link', userController.activate);
 
 router.post('/course', courseController.create);
+router.get('/courses', courseController.getCourses);
 
 router.post('/assignment', assignmentController.create);
 router.put('/assignment-add', courseController.addAssignment);

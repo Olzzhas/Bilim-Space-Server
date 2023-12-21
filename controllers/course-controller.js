@@ -1,3 +1,4 @@
+const courseModel = require('../models/course-model');
 const assignmentService = require('../service/assignment-service');
 const courseService = require('../service/course-service');
 class CourseController {
@@ -5,6 +6,8 @@ class CourseController {
     try {
       const { title, description, teacher, students } = req.body;
       const courseData = await courseService.create(title, description, teacher, students);
+
+      console.log(students);
 
       return res.json(courseData);
     } catch (error) {
@@ -21,6 +24,16 @@ class CourseController {
       const assignmentData = await courseService.addAssignment(courseId, assignment);
 
       return res.json(assignmentData);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getCourses(req, res, next) {
+    try {
+      const courses = await courseModel.find();
+
+      return res.json(courses);
     } catch (error) {
       next(error);
     }
