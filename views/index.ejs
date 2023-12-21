@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Мой блог</title>
+    <link rel="stylesheet" type="text/css" href="/styles/index-style.css" />
+  </head>
+  <body>
+    <h1>Мой блог</h1>
+    <form action="/api/post" method="post">
+      <input type="text" name="title" placeholder="Заголовок" />
+      <textarea name="content" placeholder="Содержание"></textarea>
+      <button type="submit">Опубликовать</button>
+    </form>
+    <ul>
+      <% posts.forEach(post => { %>
+      <li>
+        <h2><%= post.title %></h2>
+        <p><%= post.content %></p>
+      </li>
+      <% }); %>
+    </ul>
+  </body>
+</html>

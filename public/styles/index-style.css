@@ -1,0 +1,41 @@
+/* public/css/styles.css */
+
+body {
+  font-family: Arial, sans-serif;
+}
+
+h1 {
+  color: #333;
+}
+
+form {
+  margin: 20px 0;
+}
+
+input[type='text'],
+textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+button {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  border: 1px solid #ddd;
+  margin: 10px 0;
+  padding: 10px;
+}
+
+/* Дополнительные стили могут быть добавлены по необходимости */
