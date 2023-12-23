@@ -4,7 +4,12 @@ const CourseSchema = new mongoose.Schema({
   title: { type: String, required: true },
   description: { type: String },
   teacher: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-  assignments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Assignment' }],
+  assignments: [
+    {
+      _id: { type: mongoose.Schema.Types.ObjectId, ref: 'Assignment' },
+      title: { type: String },
+    },
+  ],
   studentsData: [
     {
       student: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
