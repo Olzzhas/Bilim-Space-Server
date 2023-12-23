@@ -48,6 +48,7 @@ router.post('/assignment', assignmentController.create);
 router.put('/assignment-add', courseController.addAssignment);
 
 router.put('/assignment/grade', assignmentController.setGrade);
+router.post('/assignment/grade', assignmentController.getGradeById);
 
 router.post('/file/test', upload.single('file'), (req, res, next) => {
   try {

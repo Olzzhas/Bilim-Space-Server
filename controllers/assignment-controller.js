@@ -1,3 +1,4 @@
+const { log } = require('console');
 const ApiError = require('../exceptions/api-error');
 const assignmentModel = require('../models/assignment-model');
 const courseModel = require('../models/course-model');
@@ -52,7 +53,6 @@ class AssignmentController {
       const { assignmentId, studentId, grade } = req.body;
 
       const assignment = await assignmentModel.findById(assignmentId);
-
       if (!assignment) {
         throw ApiError.BadRequest('Assignment is not found');
       }
@@ -68,6 +68,26 @@ class AssignmentController {
       await assignment.save();
 
       return res.json(assignment);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getGradeById(req, res, next) {
+    try {
+      const { assignmentId, studentId } = req.body;
+
+      const assignment = await assignmentModel.findById(assignmentId);
+      if (!assignment) {
+        throw ApiError.BadRequest('Assignment is not found');
+      }
+
+      const grade = assignment.grades.find((grade) => grade.student.equals(studentId));
+      if (!grade) {
+        throw ApiError.BadRequest('Assignment is not found');
+      }
+
+      return res.json(grade.grade);
     } catch (error) {
       next(error);
     }
