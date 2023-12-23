@@ -1,8 +1,6 @@
-const { log } = require('console');
 const ApiError = require('../exceptions/api-error');
 const assignmentModel = require('../models/assignment-model');
 const courseModel = require('../models/course-model');
-const assignmentService = require('../service/assignment-service');
 
 class AssignmentController {
   async create(req, res, next) {
@@ -88,6 +86,22 @@ class AssignmentController {
       }
 
       return res.json(grade.grade);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async deleteAssignment(req, res, next) {
+    try {
+      const { assignmentId, courseId } = req.body;
+
+      await courseModel.findByIdAndUpdate(courseId, {
+        $pull: { assignments: { _id: assignmentId } },
+      });
+
+      await assignmentModel.findByIdAndDelete(assignmentId);
+
+      return res.json({ success: true, message: 'assignment deleted successfully' });
     } catch (error) {
       next(error);
     }

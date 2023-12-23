@@ -45,10 +45,12 @@ router.get('/course/:id', courseController.getCourseById);
 
 router.get('/assignment/:id', assignmentController.getAssignmentById);
 router.post('/assignment', assignmentController.create);
-router.put('/assignment-add', courseController.addAssignment);
+router.delete('/assignment', assignmentController.deleteAssignment);
+// router.put('/assignment-add', courseController.addAssignment);
 
 router.put('/assignment/grade', assignmentController.setGrade);
 router.post('/assignment/grade', assignmentController.getGradeById);
+// router.delete('/assignment/grade', assignmentController.deleteGrade)
 
 router.post('/file/test', upload.single('file'), (req, res, next) => {
   try {
