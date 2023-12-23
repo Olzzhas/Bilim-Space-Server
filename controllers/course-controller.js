@@ -15,7 +15,7 @@ class CourseController {
         await userModel.updateOne(
           { _id: studentsData[i].student },
           {
-            $set: {
+            $push: {
               courses: courseID,
             },
           },

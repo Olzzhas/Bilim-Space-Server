@@ -6,6 +6,7 @@ const authMiddleware = require('../middlewares/auth-middleware');
 const postController = require('../controllers/post-controller');
 const courseController = require('../controllers/course-controller');
 const assignmentController = require('../controllers/assignment-controller');
+const upload = require('../middlewares/uppload-middleware');
 
 //front
 router.get('/registration', (req, res) => {
@@ -44,5 +45,13 @@ router.get('/course/:id', courseController.getCourseById);
 
 router.post('/assignment', assignmentController.create);
 router.put('/assignment-add', courseController.addAssignment);
+
+router.post('/file/test', upload.single('file'), (req, res, next) => {
+  try {
+    res.json({ message: 'File uploaded successfully' });
+  } catch (error) {
+    next(error);
+  }
+});
 
 module.exports = router;
