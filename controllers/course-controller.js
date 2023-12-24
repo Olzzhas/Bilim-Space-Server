@@ -103,6 +103,23 @@ class CourseController {
 
   async addUser(req, res, next) {
     try {
+      const id = req.params.id;
+
+      const course = await courseModel.findByIdAndUpdate(
+        { id },
+        {
+          $push: {},
+        },
+      );
+
+      await courseModel.updateOne(
+        { _id: courseId },
+        {
+          $push: {
+            assignments: { _id: newAssignmentId, title: title },
+          },
+        },
+      );
     } catch (error) {
       next(error);
     }
