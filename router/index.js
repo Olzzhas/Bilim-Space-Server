@@ -33,6 +33,8 @@ router.post(
   '/register',
   body('email').isEmail(),
   body('password').isLength({ min: 8, max: 32 }),
+  body('firstname').isLength({ max: 64 }),
+  body('lastname').isLength({ max: 64 }),
   userController.registration,
 );
 router.post('/login', userController.login);

@@ -13,7 +13,8 @@ const CourseSchema = new mongoose.Schema({
   studentsData: [
     {
       student: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-      fullname: { type: String },
+      firstname: { type: String },
+      lastname: { type: String },
       grades: [{}],
       attendance: [{}],
     },
