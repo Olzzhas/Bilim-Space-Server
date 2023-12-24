@@ -1,3 +1,4 @@
+const ApiError = require('../exceptions/api-error');
 const courseModel = require('../models/course-model');
 const userModel = require('../models/user-model');
 const assignmentService = require('../service/assignment-service');
@@ -16,7 +17,7 @@ class CourseController {
           { _id: studentsData[i].student },
           {
             $push: {
-              courses: courseID,
+              courses: { id: courseID, title: title },
             },
           },
         );
@@ -57,6 +58,44 @@ class CourseController {
       const courseData = await courseModel.findById(req.params.id);
 
       return res.json(courseData);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getCoursesOfUser(req, res, next) {
+    try {
+      const id = req.params.id;
+
+      const userData = await userModel.findById(id);
+      if (!userData) {
+        throw ApiError.BadRequest('User is not found');
+      }
+
+      return res.json(userData.courses);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async deleteCourse(req, res, next) {
+    try {
+      const courseId = req.params.id;
+
+      const course = await courseModel.findById(courseId);
+      if (!course) {
+        throw ApiError.BadRequest('Course is not found');
+      }
+
+      const userIds = course.studentsData.map((student) => student.student.toString());
+      await courseModel.findByIdAndDelete(courseId);
+
+      await userModel.updateMany(
+        { _id: { $in: userIds } },
+        { $pull: { courses: { id: courseId } } },
+      );
+
+      return res.json({ success: true });
     } catch (error) {
       next(error);
     }

@@ -42,6 +42,8 @@ router.get('/activate/:link', userController.activate);
 router.post('/course', courseController.create);
 router.get('/courses', courseController.getCourses);
 router.get('/course/:id', courseController.getCourseById);
+router.get('/courses/:id', courseController.getCoursesOfUser);
+router.put('/course/:id', courseController.deleteCourse);
 
 router.get('/assignment/:id', assignmentController.getAssignmentById);
 router.post('/assignment', assignmentController.create);
