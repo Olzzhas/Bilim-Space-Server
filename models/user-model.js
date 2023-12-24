@@ -5,7 +5,7 @@ const UserSchema = new mongoose.Schema({
   password: { type: String, requried: true },
   firstname: { type: String },
   lastname: { type: String },
-  role: { type: String, required: true },
+  role: { type: String },
   isActivated: { type: Boolean, default: false },
   activationLink: { type: String },
   courses: [

@@ -6,7 +6,7 @@ const authMiddleware = require('../middlewares/auth-middleware');
 const postController = require('../controllers/post-controller');
 const courseController = require('../controllers/course-controller');
 const assignmentController = require('../controllers/assignment-controller');
-const upload = require('../middlewares/uppload-middleware');
+const upload = require('../middlewares/upload-middleware');
 const path = require('path');
 const assignmentModel = require('../models/assignment-model');
 //front
@@ -29,7 +29,7 @@ router.get('/index', (req, res) => {
 router.post('/post', authMiddleware, postController.create);
 
 //back
-router.get('/users', authMiddleware, userController.getUsers);
+router.get('/users', userController.getUsers);
 router.post(
   '/register',
   body('email').isEmail(),
@@ -60,20 +60,7 @@ router.post('/assignment/grade', assignmentController.getGradeById);
 
 router.post('/file/upload/:assignmentId/:userId', upload.single('file'), async (req, res, next) => {
   try {
-    const { assignmentId, userId } = req.params;
-    console.log(assignmentId + '   ' + userId);
-    const data = await assignmentModel.findByIdAndUpdate(assignmentId, {
-      $push: {
-        files: {
-          filename: 'sadasdsa',
-          studentId: userId,
-        },
-      },
-    });
-
-    await data.save();
-
-    return res.json(data);
+    return res.json(123);
   } catch (error) {
     next(error);
   }
