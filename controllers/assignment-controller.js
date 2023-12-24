@@ -5,16 +5,31 @@ const courseModel = require('../models/course-model');
 class AssignmentController {
   async create(req, res, next) {
     try {
-      const { title, courseId, description, filepath, gradeType, deadline, teacher } = req.body;
+      const { title, courseId, description, filepath, typeOfGrade, deadline, teacher } = req.body;
+
+      let typeGrade;
+      if (typeOfGrade === 'ВСК1') {
+        typeGrade = 1;
+      } else if (typeOfGrade === 'Midterm') {
+        typeGrade = 2;
+      } else if (typeOfGrade === 'ВСК1') {
+        typeGrade = 3;
+      } else if (typeOfGrade === 'Endterm') {
+        typeGrade = 4;
+      } else if (typeOfGrade === 'Final') {
+        typeGrade = 5;
+      }
 
       const assignmentData = await assignmentModel.create({
         title: title,
-        gradeType: gradeType,
+        typeOfGrade: typeOfGrade,
         description: description,
         filepath: filepath,
         deadline: deadline,
         teacher: teacher,
       });
+
+      console.log(courseId);
 
       const newAssignmentId = assignmentData._id.toString();
 

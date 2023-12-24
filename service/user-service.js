@@ -9,7 +9,7 @@ const ApiError = require('../exceptions/api-error');
 const userModel = require('../models/user-model');
 
 class UserService {
-  async registration(email, password, firstname, lastname) {
+  async registration(email, password, firstname, lastname, role) {
     const candidate = await UserModel.findOne({ email });
     if (candidate) {
       throw ApiError.BadRequest(`Пользователь с почтовым адресом ${email} уже существует`);
@@ -24,6 +24,7 @@ class UserService {
       activationLink: activationLink,
       firstname: firstname,
       lastname: lastname,
+      role: role,
     });
     await mailService.sendActivationMail(
       email,
@@ -33,7 +34,7 @@ class UserService {
     const userDto = new UserDto(user); // id, email, isActivated
     const tokens = tokenService.generateTokens({ ...userDto });
 
-    await tokenService.saveToken(userDto.id, tokens.refreshToken);
+    await tokenService.saveToken(userDto.id, role, tokens.refreshToken);
 
     return { ...tokens, user: userDto };
   }
@@ -63,7 +64,7 @@ class UserService {
     const userDto = new UserDto(user); // id, email, isActivated
     const tokens = tokenService.generateTokens({ ...userDto });
 
-    await tokenService.saveToken(userDto.id, tokens.refreshToken);
+    await tokenService.saveToken(userDto.id, userDto.role, tokens.refreshToken);
     return { ...tokens, user: userDto };
   }
 

@@ -3,13 +3,14 @@ const mongoose = require('mongoose');
 const assignmentSchema = mongoose.Schema({
   title: { type: String, required: true },
   description: { type: String },
-  files: [{ type: String, default: '' }],
+  files: [
+    {
+      studentId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+      createdAt: { type: Date, default: Date.now },
+      filename: { type: String, required: true },
+    },
+  ],
   typeOfGrade: { type: Number, required: true },
-  // 1 - First part
-  // 2 - First srs
-  // 3 - Second part
-  // 4 - Second srs
-  // 5 - Final
   grades: [
     {
       student: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },

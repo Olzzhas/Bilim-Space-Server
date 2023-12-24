@@ -7,7 +7,8 @@ const postController = require('../controllers/post-controller');
 const courseController = require('../controllers/course-controller');
 const assignmentController = require('../controllers/assignment-controller');
 const upload = require('../middlewares/uppload-middleware');
-
+const path = require('path');
+const assignmentModel = require('../models/assignment-model');
 //front
 router.get('/registration', (req, res) => {
   res.render('registration');
@@ -32,7 +33,7 @@ router.get('/users', authMiddleware, userController.getUsers);
 router.post(
   '/register',
   body('email').isEmail(),
-  body('password').isLength({ min: 8, max: 32 }),
+  body('password').isLength({ min: 6, max: 32 }),
   body('firstname').isLength({ max: 64 }),
   body('lastname').isLength({ max: 64 }),
   userController.registration,
@@ -46,7 +47,7 @@ router.get('/courses', courseController.getCourses);
 router.get('/course/:id', courseController.getCourseById);
 router.get('/courses/:id', courseController.getCoursesOfUser);
 router.put('/course/:id', courseController.deleteCourse);
-// router.put('/course/adduser/:id', courseController.addUser); TODO TODO TODO TODO
+router.put('/course/adduser', courseController.addUser);
 
 router.get('/assignment/:id', assignmentController.getAssignmentById);
 router.post('/assignment', assignmentController.create);
@@ -57,12 +58,37 @@ router.put('/assignment/grade', assignmentController.setGrade);
 router.post('/assignment/grade', assignmentController.getGradeById);
 // router.delete('/assignment/grade', assignmentController.deleteGrade)
 
-router.post('/file/test', upload.single('file'), (req, res, next) => {
+router.post('/file/upload/:assignmentId/:userId', upload.single('file'), async (req, res, next) => {
   try {
-    res.json({ message: 'File uploaded successfully' });
+    const { assignmentId, userId } = req.params;
+    console.log(assignmentId + '   ' + userId);
+    const data = await assignmentModel.findByIdAndUpdate(assignmentId, {
+      $push: {
+        files: {
+          filename: 'sadasdsa',
+          studentId: userId,
+        },
+      },
+    });
+
+    await data.save();
+
+    return res.json(data);
   } catch (error) {
     next(error);
   }
+});
+
+router.get('/file/download/:filename', (req, res, next) => {
+  const filename = req.params.filename;
+  const filePath = path.join(__dirname, '../uploads', filename);
+
+  res.download(filePath, (err) => {
+    if (err) {
+      console.error('Error downloading file:', err);
+      res.status(500).send('Error downloading file');
+    }
+  });
 });
 
 module.exports = router;

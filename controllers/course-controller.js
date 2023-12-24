@@ -23,6 +23,15 @@ class CourseController {
         );
       }
 
+      await userModel.updateOne(
+        { _id: teacher },
+        {
+          $push: {
+            courses: { id: courseID, title: title },
+          },
+        },
+      );
+
       return res.json(courseData);
     } catch (error) {
       next(error);
@@ -103,12 +112,16 @@ class CourseController {
 
   async addUser(req, res, next) {
     try {
-      const id = req.params.id;
+      const { userId, courseId } = req.body;
 
-      const course = await courseModel.findByIdAndUpdate(
-        { id },
+      const course = await userModel.findByIdAndUpdate(
+        { _id: userId },
         {
-          $push: {},
+          $push: {
+            courses: {
+              _id: courseId,
+            },
+          },
         },
       );
 

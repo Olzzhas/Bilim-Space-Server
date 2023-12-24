@@ -1,9 +1,20 @@
 const multer = require('multer');
 const moment = require('moment');
+const fs = require('fs');
 
 const storage = multer.diskStorage({
   destination(req, file, cb) {
-    cb(null, 'uploads/');
+    const { userId, assignmentId } = req.params;
+
+    if (!fs.existsSync(`uploads/${assignmentId}`)) {
+      fs.mkdirSync(`uploads/${assignmentId}`, { recursive: true });
+    }
+
+    if (!fs.existsSync(`uploads/${assignmentId}/${userId}`)) {
+      fs.mkdirSync(`uploads/${assignmentId}/${userId}`, { recursive: true });
+    }
+
+    cb(null, `uploads/${assignmentId}/${userId}/`);
   },
   filename(req, file, cb) {
     const date = moment().format('DDMMYYYY-HHmmss-SSS');
@@ -24,7 +35,7 @@ const fileFilter = (req, file, cb) => {
 };
 
 const limits = {
-  fileSize: 1024 * 1024 * 5,
+  fileSize: 1024 * 1024 * 20,
 };
 
 module.exports = multer({
