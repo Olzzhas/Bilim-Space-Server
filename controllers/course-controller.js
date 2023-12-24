@@ -100,6 +100,13 @@ class CourseController {
       next(error);
     }
   }
+
+  async addUser(req, res, next) {
+    try {
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 module.exports = new CourseController();

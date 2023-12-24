@@ -5,17 +5,20 @@ const courseModel = require('../models/course-model');
 class AssignmentController {
   async create(req, res, next) {
     try {
-      const { title, courseId, description, files } = req.body;
+      const { title, courseId, description, filepath, gradeType, deadline, teacher } = req.body;
 
       const assignmentData = await assignmentModel.create({
         title: title,
+        gradeType: gradeType,
         description: description,
-        files: files,
+        filepath: filepath,
+        deadline: deadline,
+        teacher: teacher,
       });
 
       const newAssignmentId = assignmentData._id.toString();
 
-      const courseData = await courseModel.updateOne(
+      await courseModel.updateOne(
         { _id: courseId },
         {
           $push: {

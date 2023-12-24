@@ -46,6 +46,7 @@ router.get('/courses', courseController.getCourses);
 router.get('/course/:id', courseController.getCourseById);
 router.get('/courses/:id', courseController.getCoursesOfUser);
 router.put('/course/:id', courseController.deleteCourse);
+// router.put('/course/adduser/:id', courseController.addUser); TODO TODO TODO TODO
 
 router.get('/assignment/:id', assignmentController.getAssignmentById);
 router.post('/assignment', assignmentController.create);

@@ -14,6 +14,7 @@ const assignmentSchema = mongoose.Schema({
     {
       student: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
       grade: { type: Number, default: 0 },
+      gradeType: { type: Number },
     },
   ],
   createdAt: { type: Date, default: Date.now },
