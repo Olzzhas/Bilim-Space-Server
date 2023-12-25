@@ -11,19 +11,19 @@ const path = require('path');
 const assignmentModel = require('../models/assignment-model');
 //front
 router.get('/registration', (req, res) => {
-  res.render('registration');
+   res.render('registration');
 });
 
 router.get('/login', (req, res) => {
-  res.render('login');
+   res.render('login');
 });
 
 router.get('/index', (req, res) => {
-  const posts = [
-    { title: 'Заголовок поста 1', content: 'Содержание поста 1' },
-    { title: 'Заголовок поста 2', content: 'Содержание поста 2' },
-  ];
-  res.render('index', { posts });
+   const posts = [
+      { title: 'Заголовок поста 1', content: 'Содержание поста 1' },
+      { title: 'Заголовок поста 2', content: 'Содержание поста 2' },
+   ];
+   res.render('index', { posts });
 });
 
 router.post('/post', authMiddleware, postController.create);
@@ -31,12 +31,12 @@ router.post('/post', authMiddleware, postController.create);
 //back
 router.get('/users', userController.getUsers);
 router.post(
-  '/register',
-  body('email').isEmail(),
-  body('password').isLength({ min: 6, max: 32 }),
-  body('firstname').isLength({ max: 64 }),
-  body('lastname').isLength({ max: 64 }),
-  userController.registration,
+   '/register',
+   body('email').isEmail(),
+   body('password').isLength({ min: 6, max: 32 }),
+   body('firstname').isLength({ max: 64 }),
+   body('lastname').isLength({ max: 64 }),
+   userController.registration,
 );
 router.post('/login', userController.login);
 router.post('/logout', userController.logout);
@@ -52,30 +52,36 @@ router.put('/course/adduser', courseController.addUser);
 router.get('/assignment/:id', assignmentController.getAssignmentById);
 router.post('/assignment', assignmentController.create);
 router.delete('/assignment', assignmentController.deleteAssignment);
+router.post('/assignment-many', assignmentController.getManyAssignments);
 // router.put('/assignment-add', courseController.addAssignment);
 
 router.put('/assignment/grade', assignmentController.setGrade);
+router.put('/assignment/update-grades', assignmentController.updateGrades);
 router.post('/assignment/grade', assignmentController.getGradeById);
 // router.delete('/assignment/grade', assignmentController.deleteGrade)
 
 router.post('/file/upload/:assignmentId/:userId', upload.single('file'), async (req, res, next) => {
-  try {
-    return res.json(123);
-  } catch (error) {
-    next(error);
-  }
+   try {
+      return res.json(123);
+   } catch (error) {
+      next(error);
+   }
 });
 
-router.get('/file/download/:filename', (req, res, next) => {
-  const filename = req.params.filename;
-  const filePath = path.join(__dirname, '../uploads', filename);
+router.get('/file/download/:assignment/:user/:filename', (req, res, next) => {
+   const filename = req.params.filename;
+   const filePath = path.join(
+      __dirname,
+      `../uploads/${req.params.assignment}/${req.params.user}`,
+      filename,
+   );
 
-  res.download(filePath, (err) => {
-    if (err) {
-      console.error('Error downloading file:', err);
-      res.status(500).send('Error downloading file');
-    }
-  });
+   res.download(filePath, (err) => {
+      if (err) {
+         console.error('Error downloading file:', err);
+         res.status(500).send('Error downloading file');
+      }
+   });
 });
 
 module.exports = router;
